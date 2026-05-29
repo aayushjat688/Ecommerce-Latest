@@ -1,6 +1,6 @@
 import { Routes,Route } from 'react-router-dom'
 import { OrdersPage } from './pages/OrdersPage';
-import { CheckoutPage } from './pages/CheckoutPage';
+import { CheckoutPage } from './pages/checkout/CheckoutPage';
 import { HomePage } from "./pages/HomePage";
 export function App () {
   return (

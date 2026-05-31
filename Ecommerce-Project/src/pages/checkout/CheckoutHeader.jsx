@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import './CheckoutHeader.css'
 export function CheckoutHeader ({cart}) {
-  console.log(cart);
+
   let totalCartItems = 0;
     cart.forEach((cartItems)=>{
       totalCartItems += cartItems.quantity;

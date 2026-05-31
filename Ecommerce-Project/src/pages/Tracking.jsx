@@ -1,7 +1,50 @@
 import { Link } from "react-router";
 import { Header } from "../components/Header";
+import axios from 'axios';
+import dayjs from "dayjs";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import './Tracking.css'
 export function Tracking ({cart}) {
+  const [order , setOrder] = useState(null);
+  const {orderId , productId} = useParams();
+  // console.log(param);
+
+  useEffect(()=>{
+    const fetchTrackingData = async ()=>{
+    const Response = await axios.get(`/api/orders/${orderId}?expand=products`)
+    setOrder(Response.data);
+  }
+  fetchTrackingData();
+  },[orderId])
+  if(!order) return null;
+// console.log(order);
+  const orderProduct = order.products.find((orderProduct) =>{
+    // console.log(orderProduct.product);
+    
+    return orderProduct.productId === productId;
+  })
+  const totalDeliveryTimeMs = orderProduct.estimatedDeliveryTimeMs - order.orderTimeMs;
+  const timePassedMs = dayjs().valueOf() - order.orderTimeMs;
+
+  let percentOfBar = (timePassedMs/totalDeliveryTimeMs)*100;
+ let timeOfDeliver = 'Arriving on ';
+let isPreparing = false;
+let isShipped = false;
+let isDelivered = false;
+if(percentOfBar <= 33){
+  isPreparing=true;
+}else if(percentOfBar > 33 && percentOfBar<100){
+  isShipped=true;
+}else{
+ percentOfBar=100;
+     isDelivered = true;
+     timeOfDeliver = 'Delivered on '
+}
+ 
+
+   
+  // console.log(percentOfBar);
   return (
     <>
       <title>Tracking</title>
@@ -15,37 +58,42 @@ export function Tracking ({cart}) {
         </Link>
 
         <div className="delivery-date">
-          Arriving on Monday, June 13
+          
+          
+           {timeOfDeliver + dayjs(orderProduct.estimatedDeliveryTimeMs).format('dddd, MMMM D')}
+         
         </div>
 
         <div className="product-info">
-          Black and Gray Athletic Cotton Socks - 6 Pairs
+          {orderProduct.product.name}
+          
         </div>
 
         <div className="product-info">
-          Quantity: 1
+          Quantity: {orderProduct.quantity}
         </div>
 
-        <img className="product-image" src="images/products/athletic-cotton-socks-6-pairs.jpg" />
+        <img className="product-image" src={orderProduct.product.image} />
 
         <div className="progress-labels-container">
-          <div className="progress-label">
+          <div className={`progress-label ${isPreparing && 'current-status'}`}>
             Preparing
           </div>
-          <div className="progress-label current-status">
+          <div className={`progress-label ${isShipped && 'current-status'}`}>
             Shipped
           </div>
-          <div className="progress-label">
+          <div className={`progress-label ${isDelivered && 'current-status'}`}>
             Delivered
           </div>
         </div>
 
         <div className="progress-bar-container">
-          <div className="progress-bar"></div>
+          <div style={{width: `${percentOfBar}%`}} className="progress-bar">
+
+          </div>
         </div>
       </div>
     </div>
     </>
   );
 }
-//ex from j to last karna he;

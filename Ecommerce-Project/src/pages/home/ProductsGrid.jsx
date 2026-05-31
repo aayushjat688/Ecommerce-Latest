@@ -6,7 +6,7 @@ export function ProductsGrid ( {products} ) {
         <div className="products-grid">
 
             {products.map((product) => {
-              // console.log(product);
+            
               return (
                 <Fragment key={product.id}>
                    <div className="product-container">

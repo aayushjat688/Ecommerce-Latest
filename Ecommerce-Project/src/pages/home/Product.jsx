@@ -28,7 +28,8 @@ const addToCart = async ()=>{
               }
   return (
          <Fragment>
-                   <div className="product-container">
+                   <div data-test='product-container' className="product-container">
+                    
               <div className="product-image-container">
                 <img data-testid='product-image' className="product-image"
                   src={product.image} />

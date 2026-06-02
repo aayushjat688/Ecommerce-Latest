@@ -30,7 +30,7 @@ const addToCart = async ()=>{
          <Fragment>
                    <div className="product-container">
               <div className="product-image-container">
-                <img className="product-image"
+                <img data-testid='product-image' className="product-image"
                   src={product.image} />
               </div>
 
@@ -40,7 +40,7 @@ const addToCart = async ()=>{
 
               <div className="product-rating-container">
                 
-                <img className="product-rating-stars"
+                <img className="product-rating-stars" data-testid="product-rating-stars"
                   src={`images/ratings/rating-${product.rating.stars*10}.png`} />
                 <div className="product-rating-count link-primary">
                   {product.rating.count}

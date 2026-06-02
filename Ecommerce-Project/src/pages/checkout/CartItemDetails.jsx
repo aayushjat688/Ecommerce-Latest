@@ -32,3 +32,4 @@ export function CartItemDetails ( {cartItem,loadCart} ) {
     </Fragment>
   );
 }
+//ex 8e to all

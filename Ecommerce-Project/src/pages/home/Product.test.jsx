@@ -1,6 +1,11 @@
 import { it,expect,describe,vi } from 'vitest';
 import { Product } from './Product';
+import  userEvent  from '@testing-library/user-event'
 import { render,screen } from '@testing-library/react';
+import axios from 'axios';
+
+vi.mock('axios');
+
 const product = {
     id: "02e3a47e-dd68-467e-9f71-8bf6f723fdae",
     image: "images/products/blackout-curtains-set-teal.jpg",
@@ -38,5 +43,35 @@ describe('Product',()=>{
     expect(
       screen.getByText('363')
     ).toBeInTheDocument();
+  });
+
+  it('adds a product to the cart' , async()=>{
+    const product = {
+    id: "02e3a47e-dd68-467e-9f71-8bf6f723fdae",
+    image: "images/products/blackout-curtains-set-teal.jpg",
+    name: "Blackout Curtains Set 42 x 84-Inch - Teal",
+    rating: {
+      stars: 4.5,
+      count: 363
+    },
+    priceCents: 3099,
+    keywords: ["bedroom", "home", "curtains"]
+  };
+  const loadCart = vi.fn();
+
+  render(<Product product={product} loadCart={loadCart}/>);
+
+  const user = userEvent.setup();
+  const addToCartButton = screen.getByTestId('add-to-cart-button');
+  await user.click(addToCartButton);
+
+  expect(axios.post).toHaveBeenCalledWith(
+    '/api/cart-items',
+    {
+      productId:  '02e3a47e-dd68-467e-9f71-8bf6f723fdae',
+      quantity: 1
+    }
+  );
+  expect(loadCart).toHaveBeenCalled();
   })
 })

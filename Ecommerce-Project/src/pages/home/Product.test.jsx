@@ -1,4 +1,4 @@
-import { it,expect,describe,vi } from 'vitest';
+import { it,expect,describe,vi, beforeEach } from 'vitest';
 import { Product } from './Product';
 import  userEvent  from '@testing-library/user-event'
 import { render,screen } from '@testing-library/react';
@@ -6,7 +6,15 @@ import axios from 'axios';
 
 vi.mock('axios');
 
-const product = {
+
+
+describe('Product',()=>{
+
+let product ;
+  let loadCart;
+
+  beforeEach(()=>{
+    product = {
     id: "02e3a47e-dd68-467e-9f71-8bf6f723fdae",
     image: "images/products/blackout-curtains-set-teal.jpg",
     name: "Blackout Curtains Set 42 x 84-Inch - Teal",
@@ -17,9 +25,10 @@ const product = {
     priceCents: 3099,
     keywords: ["bedroom", "home", "curtains"]
   };
-  const loadCart = vi.fn();
 
-describe('Product',()=>{
+  loadCart = vi.fn();
+  })
+
   it('displays the product details correctly', ()=>{
     render(<Product product={product} loadCart={loadCart}/>);
 
@@ -46,18 +55,7 @@ describe('Product',()=>{
   });
 
   it('adds a product to the cart' , async()=>{
-    const product = {
-    id: "02e3a47e-dd68-467e-9f71-8bf6f723fdae",
-    image: "images/products/blackout-curtains-set-teal.jpg",
-    name: "Blackout Curtains Set 42 x 84-Inch - Teal",
-    rating: {
-      stars: 4.5,
-      count: 363
-    },
-    priceCents: 3099,
-    keywords: ["bedroom", "home", "curtains"]
-  };
-  const loadCart = vi.fn();
+   
 
   render(<Product product={product} loadCart={loadCart}/>);
 
